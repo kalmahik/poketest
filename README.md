@@ -1,4 +1,4 @@
-# Pocketest
+# Poketest
 ## Installation
 ### Run instructions for iOS
 ```sh
