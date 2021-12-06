@@ -1,24 +1,23 @@
 import styled from 'styled-components/native';
 import React, {FC} from 'react';
 import {TouchableOpacity} from 'react-native';
-import {Pokemon} from "./types";
+import {Pokemon} from "../../../types";
 
 type Props = {
     pokemon: Pokemon;
+    onPress: any
 };
 
-export const PokemonListItem: FC<Props> = ({pokemon}) => {
-    return (
-        <TouchableOpacity onPress={() => {}}>
-            <Root>
-                <Row>
-                    <Image source={require('./assets/pokemon.png')} />
-                    <Title numberOfLines={1}>{pokemon.name}</Title>
-                </Row>
-            </Root>
-        </TouchableOpacity>
-    );
-};
+export const PokemonListItem: FC<Props> = ({pokemon, onPress}) => (
+    <TouchableOpacity onPress={onPress}>
+        <Root>
+            <Row>
+                <Image source={{uri: pokemon.image}}/>
+                <Title numberOfLines={1}>{pokemon.name}</Title>
+            </Row>
+        </Root>
+    </TouchableOpacity>
+)
 
 const Root = styled.View`
   height: 100px;
@@ -32,7 +31,7 @@ const Row = styled.View`
 
 const Image = styled.Image`
   height: 80px;
-  width:80px;
+  width: 80px;
   border-radius: 25px;
   margin-horizontal: 16px;
 `;

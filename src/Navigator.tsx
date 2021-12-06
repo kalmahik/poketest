@@ -1,10 +1,12 @@
 import React from 'react';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import { PokemonListScreen } from './PokemonListScreen';
+import { PokemonListScreen } from './feature/pokemon/screens/PokemonListScreen';
+import {PokemonDetailScreen} from "./feature/pokemon/screens/PokemonDetailScreen";
+import {Pokemon} from "./types";
 
 export type StackParams = {
     PokemonList: undefined;
-    PokemonDetail: undefined;
+    PokemonDetail: {pokemon: Pokemon};
 };
 
 const Stack = createNativeStackNavigator();
@@ -19,7 +21,7 @@ export const AppNavigator = () => {
             />
             <Stack.Screen
                 name={'PokemonDetail'}
-                component={() => null}
+                component={PokemonDetailScreen}
             />
         </Stack.Navigator>
     );
