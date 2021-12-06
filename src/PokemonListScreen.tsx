@@ -1,19 +1,20 @@
 import React, {FC, useCallback} from 'react';
 import {FlatList, ListRenderItemInfo} from "react-native";
-import {PockemonListItem} from './PockemonListItem';
-import {Pockemon} from "./types/types";
+import {PokemonListItem} from './PokemonListItem';
+import {Pokemon} from "./types";
 import {StackParams} from "./Navigator";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import styled from 'styled-components/native';
+import {useLoadPokemonList} from "./useLoadPokemonList";
 
-type Props = NativeStackScreenProps<StackParams, 'PockemonList'>;
+type Props = NativeStackScreenProps<StackParams, 'PokemonList'>;
 
-export const PockemonListScreen: FC<Props> = ({navigation}) => {
-
+export const PokemonListScreen: FC<Props> = () => {
+    const {isLoading, pokemons, loadData} = useLoadPokemonList();
     const renderItem = useCallback(
-        ({item}: ListRenderItemInfo<Pockemon>) => (
-            <PockemonListItem
-                pockemon={item}
+        ({item}: ListRenderItemInfo<Pokemon>) => (
+            <PokemonListItem
+                pokemon={item}
             />
         ),
         [],
@@ -22,11 +23,14 @@ export const PockemonListScreen: FC<Props> = ({navigation}) => {
     return (
         <Root>
             <FlatList
-                data={[]}
+                data={pokemons}
                 renderItem={renderItem}
                 ItemSeparatorComponent={() => <Separator/>}
                 keyExtractor={(item) => item.id}
-                refreshing={false}
+                refreshing={isLoading}
+                onRefresh={loadData}
+                onEndReached={loadData}
+                onEndReachedThreshold={0.5}
             />
         </Root>);
 }

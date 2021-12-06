@@ -1,19 +1,19 @@
 import styled from 'styled-components/native';
 import React, {FC} from 'react';
 import {TouchableOpacity} from 'react-native';
-import {Pockemon} from "./types/types";
+import {Pokemon} from "./types";
 
 type Props = {
-    pockemon: Pockemon;
+    pokemon: Pokemon;
 };
 
-export const PockemonListItem: FC<Props> = ({pockemon}) => {
+export const PokemonListItem: FC<Props> = ({pokemon}) => {
     return (
         <TouchableOpacity onPress={() => {}}>
             <Root>
                 <Row>
-                    <Image source={{uri: ''}} />
-                    <Title numberOfLines={1}>{pockemon.name}</Title>
+                    <Image source={require('./assets/pokemon.png')} />
+                    <Title numberOfLines={1}>{pokemon.name}</Title>
                 </Row>
             </Root>
         </TouchableOpacity>
