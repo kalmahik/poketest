@@ -9,5 +9,8 @@ Run an Android emulator or connect an android Device
 ```sh
 npx react-native run-android
 ```
-
+### Run tests
+```sh
+npx jest
+```
 
