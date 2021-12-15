@@ -1,50 +1,58 @@
-import React, {FC, useCallback} from 'react';
-import {ActivityIndicator, FlatList, ListRenderItemInfo} from "react-native";
+import React, {useCallback} from 'react';
+import {ActivityIndicator, FlatList, ListRenderItemInfo} from 'react-native';
 import {PokemonListItem} from '../ui/PokemonListItem';
-import {Pokemon} from "../../../types";
-import {StackParams} from "../../../Navigator";
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {Pokemon} from '../../../types';
 import styled from 'styled-components/native';
-import {useLoadPokemonList} from "../hooks/useLoadPokemonList";
+import {useLoadPokemonList} from '../hooks/useLoadPokemonList';
+import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
 
-type Props = NativeStackScreenProps<StackParams, 'PokemonList'>;
+interface Props {}
 
-export const PokemonListScreen: FC<Props> = ({navigation}) => {
-    const {isLoading, pokemons, loadData} = useLoadPokemonList();
+export const PokemonListScreen: NavigationFunctionComponent<Props> = props => {
+  const {isLoading, pokemons, loadData} = useLoadPokemonList();
 
-    const renderItem = useCallback(
-        ({item}: ListRenderItemInfo<Pokemon>) => {
-            const openDetail = () => navigation.navigate('PokemonDetail', {pokemon: item})
-            return (
-                <PokemonListItem
-                    pokemon={item}
-                    onPress={openDetail}
-                />
-            )}, [],
-    );
+  const renderItem = useCallback(({item}: ListRenderItemInfo<Pokemon>) => {
+    const openDetail = () => {
+      Navigation.push(props.componentId, {
+        component: {
+          name: 'PokemonDetail',
+          passProps: {
+            pokemon: item,
+          },
+          options: {
+            topBar: {
+              title: {
+                text: item.name,
+              },
+            },
+          },
+        },
+      });
+    };
+    return <PokemonListItem pokemon={item} onPress={openDetail} />;
+  }, []);
 
-    const renderFooter = useCallback(
-        () => (
-            <ActivityIndicator size="large"/>
-        ),
-        [],
-    );
+  const renderFooter = useCallback(
+    () => <ActivityIndicator size="large" />,
+    [],
+  );
 
-    return (
-        <Root>
-            <FlatList
-                data={pokemons}
-                renderItem={renderItem}
-                ItemSeparatorComponent={() => <Separator/>}
-                keyExtractor={(item) => item.name}
-                refreshing={isLoading}
-                onRefresh={loadData}
-                onEndReached={loadData}
-                onEndReachedThreshold={0.5}
-                ListFooterComponent={renderFooter}
-            />
-        </Root>);
-}
+  return (
+    <Root>
+      <FlatList
+        data={pokemons}
+        renderItem={renderItem}
+        ItemSeparatorComponent={() => <Separator />}
+        keyExtractor={item => item.name}
+        refreshing={isLoading}
+        onRefresh={loadData}
+        onEndReached={loadData}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
+      />
+    </Root>
+  );
+};
 
 const Root = styled.View`
   flex: 1;
